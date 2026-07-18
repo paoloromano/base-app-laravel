@@ -4,12 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title inertia>{{ config('app.name', 'App Base') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+        {{-- Applica il tema PRIMA del render di React per evitare il flash (FOUC):
+             legge la scelta salvata o la preferenza di sistema e setta la classe
+             sull'<html>. La logica è duplicata (in piccolo) in ThemeProvider.tsx,
+             che poi diventa la fonte di verità una volta montato React. --}}
         <script>
             (function () {
                 try {

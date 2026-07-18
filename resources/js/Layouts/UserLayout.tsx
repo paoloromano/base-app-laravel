@@ -1,5 +1,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import ThemeToggle from '@/Components/ThemeToggle';
+import { getInitials } from '@/lib/initials';
 import { PageProps } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import {
@@ -37,13 +38,7 @@ export default function UserLayout({ children, header }: PropsWithChildren<Props
     const { auth } = usePage<PageProps>().props;
     const [menuOpen, setMenuOpen] = useState(false);
     const isAdmin = auth.user.roles.includes('admin');
-
-    const initials = auth.user.name
-        .split(' ')
-        .map((p) => p[0])
-        .slice(0, 2)
-        .join('')
-        .toUpperCase();
+    const initials = getInitials(auth.user.name);
 
     return (
         <div className="min-h-screen bg-default-50">

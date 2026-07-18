@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { HeroUIProvider } from '@heroui/react';
 import { ThemeProvider } from './Providers/ThemeProvider';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'App Base';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

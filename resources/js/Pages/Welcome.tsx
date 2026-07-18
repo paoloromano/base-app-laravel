@@ -8,12 +8,10 @@ export default function Welcome({
     auth,
     canLogin,
     canRegister,
-    laravelVersion,
     phpVersion,
 }: PageProps<{
     canLogin: boolean;
     canRegister: boolean;
-    laravelVersion: string;
     phpVersion: string;
 }>) {
     return (
@@ -61,10 +59,10 @@ export default function Welcome({
                 <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
                     <section className="mx-auto max-w-3xl text-center">
                         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-                            App Base Laravel
+                            App Base
                         </h1>
                         <p className="mt-4 text-lg text-default-600">
-                            Core riutilizzabile: Laravel 12 + Inertia + React + HeroUI + Tailwind v4.
+                            Core riutilizzabile: Inertia + React + HeroUI + Tailwind v4.
                             Auth, ruoli e area admin pronti.
                         </p>
                     </section>
@@ -98,7 +96,7 @@ export default function Welcome({
                 </main>
 
                 <footer className="mx-auto max-w-7xl px-4 py-8 text-center text-sm text-default-500 sm:px-6">
-                    Laravel v{laravelVersion} · PHP v{phpVersion}
+                    PHP v{phpVersion}
                 </footer>
             </div>
         </>

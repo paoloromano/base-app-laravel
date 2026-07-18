@@ -1,5 +1,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import ThemeToggle from '@/Components/ThemeToggle';
+import { getInitials } from '@/lib/initials';
 import { PageProps } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import {
@@ -59,13 +60,10 @@ export default function AdminLayout({ children, header }: PropsWithChildren<Prop
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const currentPath = url || (typeof window !== 'undefined' ? window.location.pathname : '');
 
-    const initials = auth.user.name
-        .split(' ')
-        .map((p) => p[0])
-        .slice(0, 2)
-        .join('')
-        .toUpperCase();
+    const initials = getInitials(auth.user.name);
 
+    // Admin dashboard è attiva solo su match esatto '/admin'; le altre voci
+    // (utenti, ruoli) usano startsWith per restare evidenziate anche nelle sottopagine.
     const isActive = (href: string) =>
         href === '/admin' ? currentPath === '/admin' : currentPath.startsWith(href);
 

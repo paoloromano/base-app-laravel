@@ -12,6 +12,8 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const STORAGE_KEY = 'theme';
 
+// Tema iniziale: scelta salvata dall'utente, altrimenti preferenza di sistema.
+// Deve restare allineato allo script inline in app.blade.php (anti-FOUC).
 function getInitialTheme(): Theme {
     if (typeof window === 'undefined') return 'light';
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
@@ -22,6 +24,8 @@ function getInitialTheme(): Theme {
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
+    // Riflette il tema sull'elemento <html> (HeroUI/Tailwind leggono la classe
+    // .dark) e lo persiste in localStorage a ogni cambio.
     useEffect(() => {
         const root = document.documentElement;
         root.classList.remove('light', 'dark');
