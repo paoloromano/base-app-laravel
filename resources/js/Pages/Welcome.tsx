@@ -1,7 +1,7 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import ThemeToggle from '@/Components/ThemeToggle';
 import { Head, Link } from '@inertiajs/react';
-import { Button, Card, CardBody } from '@heroui/react';
+import { Card, buttonVariants } from '@heroui/react';
 import { PageProps } from '@/types';
 
 export default function Welcome({
@@ -17,39 +17,49 @@ export default function Welcome({
     return (
         <>
             <Head title="Benvenuto" />
-            <div className="min-h-screen bg-default-50">
+            <div className="min-h-screen bg-background">
                 <header className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
                     <Link href="/" className="flex items-center gap-2">
-                        <ApplicationLogo className="h-8 w-8 fill-current text-primary" />
+                        <ApplicationLogo className="h-8 w-8 fill-current text-accent" />
                         <span className="font-semibold">App Base</span>
                     </Link>
                     <div className="flex items-center gap-2">
                         <ThemeToggle />
+                        {/* In v3 Button non è più polimorfico: gli stili si applicano
+                            al Link di Inertia tramite buttonVariants. */}
                         {auth?.user ? (
-                            <Button as={Link} href="/dashboard" color="primary" size="sm">
+                            <Link
+                                href="/dashboard"
+                                className={buttonVariants({
+                                    variant: 'primary',
+                                    size: 'sm',
+                                })}
+                            >
                                 Dashboard
-                            </Button>
+                            </Link>
                         ) : (
                             <>
                                 {canLogin && (
-                                    <Button
-                                        as={Link}
+                                    <Link
                                         href={route('login')}
-                                        variant="light"
-                                        size="sm"
+                                        className={buttonVariants({
+                                            variant: 'tertiary',
+                                            size: 'sm',
+                                        })}
                                     >
                                         Accedi
-                                    </Button>
+                                    </Link>
                                 )}
                                 {canRegister && (
-                                    <Button
-                                        as={Link}
+                                    <Link
                                         href={route('register')}
-                                        color="primary"
-                                        size="sm"
+                                        className={buttonVariants({
+                                            variant: 'primary',
+                                            size: 'sm',
+                                        })}
                                     >
                                         Registrati
-                                    </Button>
+                                    </Link>
                                 )}
                             </>
                         )}
@@ -61,7 +71,7 @@ export default function Welcome({
                         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
                             App Base
                         </h1>
-                        <p className="mt-4 text-lg text-default-600">
+                        <p className="mt-4 text-lg text-muted">
                             Core riutilizzabile: Inertia + React + HeroUI + Tailwind v4.
                             Auth, ruoli e area admin pronti.
                         </p>
@@ -69,33 +79,33 @@ export default function Welcome({
 
                     <section className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         <Card>
-                            <CardBody className="gap-2">
+                            <Card.Content className="gap-2">
                                 <h3 className="text-lg font-semibold">Autenticazione</h3>
-                                <p className="text-sm text-default-500">
+                                <p className="text-sm text-muted">
                                     Login, registrazione, recupero password, verifica email.
                                 </p>
-                            </CardBody>
+                            </Card.Content>
                         </Card>
                         <Card>
-                            <CardBody className="gap-2">
+                            <Card.Content className="gap-2">
                                 <h3 className="text-lg font-semibold">Ruoli & permessi</h3>
-                                <p className="text-sm text-default-500">
+                                <p className="text-sm text-muted">
                                     Spatie Permission integrato, ruoli admin/user predefiniti.
                                 </p>
-                            </CardBody>
+                            </Card.Content>
                         </Card>
                         <Card>
-                            <CardBody className="gap-2">
+                            <Card.Content className="gap-2">
                                 <h3 className="text-lg font-semibold">UI moderna</h3>
-                                <p className="text-sm text-default-500">
+                                <p className="text-sm text-muted">
                                     HeroUI + Tailwind v4 con dark mode persistente.
                                 </p>
-                            </CardBody>
+                            </Card.Content>
                         </Card>
                     </section>
                 </main>
 
-                <footer className="mx-auto max-w-7xl px-4 py-8 text-center text-sm text-default-500 sm:px-6">
+                <footer className="mx-auto max-w-7xl px-4 py-8 text-center text-sm text-muted sm:px-6">
                     PHP v{phpVersion}
                 </footer>
             </div>

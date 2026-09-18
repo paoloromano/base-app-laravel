@@ -21,6 +21,7 @@
                     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     var theme = stored === 'light' || stored === 'dark' ? stored : (prefersDark ? 'dark' : 'light');
                     document.documentElement.classList.add(theme);
+                    document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {}
             })();
         </script>
@@ -31,7 +32,7 @@
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
     </head>
-    <body class="font-sans antialiased bg-default-50 text-foreground">
+    <body class="font-sans antialiased bg-background text-foreground">
         @inertia
     </body>
 </html>

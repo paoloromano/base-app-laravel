@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { PageProps } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Card, CardBody, CardHeader } from '@heroui/react';
+import { Card } from '@heroui/react';
 
 interface Stats {
     users_total: number;
@@ -18,22 +18,34 @@ export default function AdminDashboard({ stats }: PageProps<{ stats: Stats }>) {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <Card>
-                    <CardHeader className="text-default-500">Utenti totali</CardHeader>
-                    <CardBody>
+                    <Card.Header>
+                        <Card.Title className="text-sm font-normal text-muted">
+                            Utenti totali
+                        </Card.Title>
+                    </Card.Header>
+                    <Card.Content>
                         <p className="text-3xl font-bold">{stats.users_total}</p>
-                    </CardBody>
+                    </Card.Content>
                 </Card>
                 <Card>
-                    <CardHeader className="text-default-500">Amministratori</CardHeader>
-                    <CardBody>
+                    <Card.Header>
+                        <Card.Title className="text-sm font-normal text-muted">
+                            Amministratori
+                        </Card.Title>
+                    </Card.Header>
+                    <Card.Content>
                         <p className="text-3xl font-bold">{stats.users_admin}</p>
-                    </CardBody>
+                    </Card.Content>
                 </Card>
                 <Card>
-                    <CardHeader className="text-default-500">Utenti standard</CardHeader>
-                    <CardBody>
+                    <Card.Header>
+                        <Card.Title className="text-sm font-normal text-muted">
+                            Utenti standard
+                        </Card.Title>
+                    </Card.Header>
+                    <Card.Content>
                         <p className="text-3xl font-bold">{stats.users_user}</p>
-                    </CardBody>
+                    </Card.Content>
                 </Card>
             </div>
         </AdminLayout>

@@ -1,6 +1,6 @@
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { Button, Input } from '@heroui/react';
+import { Button, FieldError, Input, Label, Spinner, TextField } from '@heroui/react';
 import { FormEventHandler } from 'react';
 
 export default function ForgotPassword({ status }: { status?: string }) {
@@ -18,36 +18,41 @@ export default function ForgotPassword({ status }: { status?: string }) {
             <Head title="Recupera password" />
 
             <h1 className="mb-1 text-2xl font-semibold">Recupera password</h1>
-            <p className="mb-6 text-sm text-default-500">
+            <p className="mb-6 text-sm text-muted">
                 Inserisci la tua email per ricevere il link di reset.
             </p>
 
             {status && (
-                <div className="mb-4 rounded-medium bg-success-50 px-3 py-2 text-sm text-success-700">
+                <div className="mb-4 rounded-lg bg-success-soft px-3 py-2 text-sm text-success-soft-foreground">
                     {status}
                 </div>
             )}
 
             <form onSubmit={submit} className="flex flex-col gap-4">
-                <Input
+                <TextField
                     type="email"
                     name="email"
-                    label="Email"
-                    autoComplete="username"
-                    autoFocus
                     isRequired
                     value={data.email}
-                    onValueChange={(v) => setData('email', v)}
+                    onChange={(v) => setData('email', v)}
                     isInvalid={!!errors.email}
-                    errorMessage={errors.email}
-                />
+                >
+                    <Label>Email</Label>
+                    <Input autoComplete="username" autoFocus />
+                    <FieldError>{errors.email}</FieldError>
+                </TextField>
 
-                <Button type="submit" color="primary" isLoading={processing}>
-                    Invia link reset
+                <Button type="submit" variant="primary" isPending={processing}>
+                    {({ isPending }) => (
+                        <>
+                            {isPending && <Spinner color="current" size="sm" />}
+                            Invia link reset
+                        </>
+                    )}
                 </Button>
 
-                <p className="text-center text-sm text-default-500">
-                    <Link href={route('login')} className="text-primary hover:underline">
+                <p className="text-center text-sm text-muted">
+                    <Link href={route('login')} className="text-accent hover:underline">
                         Torna all'accesso
                     </Link>
                 </p>

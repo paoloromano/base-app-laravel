@@ -24,12 +24,14 @@ function getInitialTheme(): Theme {
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-    // Riflette il tema sull'elemento <html> (HeroUI/Tailwind leggono la classe
-    // .dark) e lo persiste in localStorage a ogni cambio.
+    // Riflette il tema sull'elemento <html> e lo persiste in localStorage a ogni
+    // cambio. HeroUI v3 riconosce sia la classe .dark sia data-theme: li teniamo
+    // allineati entrambi, come richiesto dalla doc.
     useEffect(() => {
         const root = document.documentElement;
         root.classList.remove('light', 'dark');
         root.classList.add(theme);
+        root.dataset.theme = theme;
         localStorage.setItem(STORAGE_KEY, theme);
     }, [theme]);
 

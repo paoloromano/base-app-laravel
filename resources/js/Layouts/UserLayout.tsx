@@ -3,21 +3,7 @@ import ThemeToggle from '@/Components/ThemeToggle';
 import { getInitials } from '@/lib/initials';
 import { PageProps } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import {
-    Avatar,
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownTrigger,
-    Navbar,
-    NavbarBrand,
-    NavbarContent,
-    NavbarItem,
-    NavbarMenu,
-    NavbarMenuItem,
-    NavbarMenuToggle,
-} from '@heroui/react';
+import { Avatar, Dropdown, Label } from '@heroui/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
 interface NavItem {
@@ -41,103 +27,133 @@ export default function UserLayout({ children, header }: PropsWithChildren<Props
     const initials = getInitials(auth.user.name);
 
     return (
-        <div className="min-h-screen bg-default-50">
-            <Navbar
-                isBordered
-                isMenuOpen={menuOpen}
-                onMenuOpenChange={setMenuOpen}
-                maxWidth="xl"
-            >
-                <NavbarContent className="sm:hidden" justify="start">
-                    <NavbarMenuToggle aria-label={menuOpen ? 'Chiudi menu' : 'Apri menu'} />
-                </NavbarContent>
-
-                <NavbarBrand>
-                    <Link href="/dashboard" className="flex items-center gap-2">
-                        <ApplicationLogo className="h-8 w-8 fill-current text-primary" />
-                        <span className="font-semibold">App Base</span>
-                    </Link>
-                </NavbarBrand>
-
-                <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-                    {navItems.map((item) => (
-                        <NavbarItem key={item.href}>
-                            <Link
-                                href={item.href}
-                                className="text-default-700 hover:text-primary"
+        <div className="min-h-screen bg-background">
+            {/* HeroUI v3 non fornisce più Navbar: la barra è composta a mano con
+                elementi nativi, come indicato dalla guida di migrazione. */}
+            <nav className="sticky top-0 z-40 w-full border-b border-separator bg-background/70 backdrop-blur-lg">
+                <header className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            className="sm:hidden"
+                            aria-label={menuOpen ? 'Chiudi menu' : 'Apri menu'}
+                            aria-expanded={menuOpen}
+                            onClick={() => setMenuOpen((open) => !open)}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                className="size-6"
                             >
-                                {item.label}
-                            </Link>
-                        </NavbarItem>
-                    ))}
-                </NavbarContent>
+                                {menuOpen ? (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M6 18 18 6M6 6l12 12"
+                                    />
+                                ) : (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                )}
+                            </svg>
+                        </button>
 
-                <NavbarContent justify="end">
-                    <NavbarItem>
+                        <Link href="/dashboard" className="flex items-center gap-2">
+                            <ApplicationLogo className="h-8 w-8 fill-current text-accent" />
+                            <span className="font-semibold">App Base</span>
+                        </Link>
+                    </div>
+
+                    <ul className="hidden items-center gap-4 sm:flex">
+                        {navItems.map((item) => (
+                            <li key={item.href}>
+                                <Link
+                                    href={item.href}
+                                    className="text-muted hover:text-accent"
+                                >
+                                    {item.label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <div className="flex items-center gap-2">
                         <ThemeToggle />
-                    </NavbarItem>
-                    <NavbarItem>
-                        <Dropdown placement="bottom-end">
-                            <DropdownTrigger>
-                                <Avatar
-                                    as="button"
-                                    isBordered
-                                    size="sm"
-                                    name={initials}
-                                    aria-label="Menu utente"
-                                />
-                            </DropdownTrigger>
-                            <DropdownMenu aria-label="Azioni utente" variant="flat">
-                                <DropdownItem key="profile-info" isReadOnly className="opacity-100">
+                        <Dropdown>
+                            <Dropdown.Trigger
+                                className="rounded-full"
+                                aria-label="Menu utente"
+                            >
+                                <Avatar size="sm">
+                                    <Avatar.Fallback>{initials}</Avatar.Fallback>
+                                </Avatar>
+                            </Dropdown.Trigger>
+                            <Dropdown.Popover placement="bottom end">
+                                <div className="px-3 py-2">
                                     <p className="font-semibold">{auth.user.name}</p>
-                                    <p className="text-xs text-default-500">{auth.user.email}</p>
-                                </DropdownItem>
-                                <DropdownItem
-                                    key="profile"
-                                    onPress={() => router.visit('/profile')}
-                                >
-                                    Profilo
-                                </DropdownItem>
-                                {isAdmin ? (
-                                    <DropdownItem
-                                        key="admin"
-                                        onPress={() => router.visit('/admin')}
+                                    <p className="text-xs text-muted">{auth.user.email}</p>
+                                </div>
+                                <Dropdown.Menu aria-label="Azioni utente">
+                                    <Dropdown.Item
+                                        id="profile"
+                                        textValue="Profilo"
+                                        onAction={() => router.visit('/profile')}
                                     >
-                                        Area Admin
-                                    </DropdownItem>
-                                ) : null}
-                                <DropdownItem
-                                    key="logout"
-                                    color="danger"
-                                    onPress={() => router.post('/logout')}
-                                >
-                                    Esci
-                                </DropdownItem>
-                            </DropdownMenu>
+                                        <Label>Profilo</Label>
+                                    </Dropdown.Item>
+                                    {isAdmin ? (
+                                        <Dropdown.Item
+                                            id="admin"
+                                            textValue="Area Admin"
+                                            onAction={() => router.visit('/admin')}
+                                        >
+                                            <Label>Area Admin</Label>
+                                        </Dropdown.Item>
+                                    ) : null}
+                                    <Dropdown.Item
+                                        id="logout"
+                                        textValue="Esci"
+                                        variant="danger"
+                                        onAction={() => router.post('/logout')}
+                                    >
+                                        <Label>Esci</Label>
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown.Popover>
                         </Dropdown>
-                    </NavbarItem>
-                </NavbarContent>
+                    </div>
+                </header>
 
-                <NavbarMenu>
-                    {navItems.map((item) => (
-                        <NavbarMenuItem key={item.href}>
-                            <Link href={item.href} className="w-full">
-                                {item.label}
-                            </Link>
-                        </NavbarMenuItem>
-                    ))}
-                    {isAdmin ? (
-                        <NavbarMenuItem>
-                            <Link href="/admin" className="w-full">
-                                Area Admin
-                            </Link>
-                        </NavbarMenuItem>
-                    ) : null}
-                </NavbarMenu>
-            </Navbar>
+                {menuOpen ? (
+                    <div className="border-t border-separator sm:hidden">
+                        <ul className="flex flex-col gap-2 p-4">
+                            {navItems.map((item) => (
+                                <li key={item.href}>
+                                    <Link href={item.href} className="block w-full py-2">
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                            {isAdmin ? (
+                                <li>
+                                    <Link href="/admin" className="block w-full py-2">
+                                        Area Admin
+                                    </Link>
+                                </li>
+                            ) : null}
+                        </ul>
+                    </div>
+                ) : null}
+            </nav>
 
             {header ? (
-                <header className="border-b border-divider bg-content1">
+                <header className="border-b border-separator bg-surface">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{header}</div>
                 </header>
             ) : null}

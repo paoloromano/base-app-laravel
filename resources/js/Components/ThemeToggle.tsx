@@ -8,7 +8,7 @@ export default function ThemeToggle() {
     return (
         <Button
             isIconOnly
-            variant="light"
+            variant="tertiary"
             size="sm"
             aria-label={isDark ? 'Attiva tema chiaro' : 'Attiva tema scuro'}
             onPress={toggle}

@@ -3,14 +3,7 @@ import ThemeToggle from '@/Components/ThemeToggle';
 import { getInitials } from '@/lib/initials';
 import { PageProps } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import {
-    Avatar,
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownTrigger,
-} from '@heroui/react';
+import { Avatar, Button, Dropdown, Label } from '@heroui/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
 interface AdminNavItem {
@@ -68,7 +61,7 @@ export default function AdminLayout({ children, header }: PropsWithChildren<Prop
         href === '/admin' ? currentPath === '/admin' : currentPath.startsWith(href);
 
     return (
-        <div className="flex min-h-screen bg-default-50">
+        <div className="flex min-h-screen bg-background">
             {sidebarOpen ? (
                 <div
                     className="fixed inset-0 z-30 bg-black/40 lg:hidden"
@@ -77,12 +70,12 @@ export default function AdminLayout({ children, header }: PropsWithChildren<Prop
             ) : null}
 
             <aside
-                className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-divider bg-content1 transition-transform lg:static lg:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-separator bg-surface transition-transform lg:static lg:translate-x-0 ${
                     sidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
-                <div className="flex h-16 items-center gap-2 border-b border-divider px-4">
-                    <ApplicationLogo className="h-7 w-7 fill-current text-primary" />
+                <div className="flex h-16 items-center gap-2 border-b border-separator px-4">
+                    <ApplicationLogo className="h-7 w-7 fill-current text-accent" />
                     <span className="font-semibold">Admin</span>
                 </div>
                 <nav className="flex flex-col gap-1 p-3">
@@ -90,10 +83,10 @@ export default function AdminLayout({ children, header }: PropsWithChildren<Prop
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 rounded-medium px-3 py-2 text-sm transition-colors ${
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                                 isActive(item.href)
-                                    ? 'bg-primary/10 text-primary'
-                                    : 'text-default-700 hover:bg-default-100'
+                                    ? 'bg-accent-soft text-accent-soft-foreground'
+                                    : 'text-muted hover:bg-default'
                             }`}
                         >
                             {item.icon}
@@ -104,10 +97,10 @@ export default function AdminLayout({ children, header }: PropsWithChildren<Prop
             </aside>
 
             <div className="flex min-w-0 flex-1 flex-col">
-                <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-divider bg-content1 px-4">
+                <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-separator bg-surface px-4">
                     <Button
                         isIconOnly
-                        variant="light"
+                        variant="tertiary"
                         className="lg:hidden"
                         aria-label="Apri sidebar"
                         onPress={() => setSidebarOpen(true)}
@@ -118,42 +111,48 @@ export default function AdminLayout({ children, header }: PropsWithChildren<Prop
                     </Button>
 
                     <div className="flex flex-1 items-center justify-end gap-2">
-                        <Link href="/dashboard" className="text-sm text-default-600 hover:text-primary">
+                        <Link href="/dashboard" className="text-sm text-muted hover:text-accent">
                             Vai al sito
                         </Link>
                         <ThemeToggle />
-                        <Dropdown placement="bottom-end">
-                            <DropdownTrigger>
-                                <Avatar
-                                    as="button"
-                                    isBordered
-                                    size="sm"
-                                    name={initials}
-                                    aria-label="Menu utente"
-                                />
-                            </DropdownTrigger>
-                            <DropdownMenu aria-label="Azioni utente" variant="flat">
-                                <DropdownItem key="profile-info" isReadOnly className="opacity-100">
+                        <Dropdown>
+                            <Dropdown.Trigger
+                                className="rounded-full"
+                                aria-label="Menu utente"
+                            >
+                                <Avatar size="sm">
+                                    <Avatar.Fallback>{initials}</Avatar.Fallback>
+                                </Avatar>
+                            </Dropdown.Trigger>
+                            <Dropdown.Popover placement="bottom end">
+                                <div className="px-3 py-2">
                                     <p className="font-semibold">{auth.user.name}</p>
-                                    <p className="text-xs text-default-500">{auth.user.email}</p>
-                                </DropdownItem>
-                                <DropdownItem key="profile" onPress={() => router.visit('/profile')}>
-                                    Profilo
-                                </DropdownItem>
-                                <DropdownItem
-                                    key="logout"
-                                    color="danger"
-                                    onPress={() => router.post('/logout')}
-                                >
-                                    Esci
-                                </DropdownItem>
-                            </DropdownMenu>
+                                    <p className="text-xs text-muted">{auth.user.email}</p>
+                                </div>
+                                <Dropdown.Menu aria-label="Azioni utente">
+                                    <Dropdown.Item
+                                        id="profile"
+                                        textValue="Profilo"
+                                        onAction={() => router.visit('/profile')}
+                                    >
+                                        <Label>Profilo</Label>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        id="logout"
+                                        textValue="Esci"
+                                        variant="danger"
+                                        onAction={() => router.post('/logout')}
+                                    >
+                                        <Label>Esci</Label>
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown.Popover>
                         </Dropdown>
                     </div>
                 </header>
 
                 {header ? (
-                    <div className="border-b border-divider bg-content1 px-4 py-6 sm:px-6">{header}</div>
+                    <div className="border-b border-separator bg-surface px-4 py-6 sm:px-6">{header}</div>
                 ) : null}
 
                 <main className="flex-1 px-4 py-6 sm:px-6">{children}</main>

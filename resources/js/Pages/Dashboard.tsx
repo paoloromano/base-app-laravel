@@ -1,7 +1,7 @@
 import UserLayout from '@/Layouts/UserLayout';
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import { Card, CardBody } from '@heroui/react';
+import { Card } from '@heroui/react';
 
 export default function Dashboard() {
     const { auth } = usePage<PageProps>().props;
@@ -13,9 +13,9 @@ export default function Dashboard() {
             <Head title="Dashboard" />
 
             <Card>
-                <CardBody>
+                <Card.Content>
                     <p>Ciao, <strong>{auth.user.name}</strong>! Sei autenticato.</p>
-                </CardBody>
+                </Card.Content>
             </Card>
         </UserLayout>
     );

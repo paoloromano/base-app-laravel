@@ -1,6 +1,14 @@
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { Button, Checkbox, Input } from '@heroui/react';
+import {
+    Button,
+    Checkbox,
+    FieldError,
+    Input,
+    Label,
+    Spinner,
+    TextField,
+} from '@heroui/react';
 import { FormEventHandler } from 'react';
 
 export default function Login({
@@ -28,65 +36,75 @@ export default function Login({
             <Head title="Accedi" />
 
             <h1 className="mb-1 text-2xl font-semibold">Accedi</h1>
-            <p className="mb-6 text-sm text-default-500">Bentornato. Inserisci le tue credenziali.</p>
+            <p className="mb-6 text-sm text-muted">Bentornato. Inserisci le tue credenziali.</p>
 
             {status && (
-                <div className="mb-4 rounded-medium bg-success-50 px-3 py-2 text-sm text-success-700">
+                <div className="mb-4 rounded-lg bg-success-soft px-3 py-2 text-sm text-success-soft-foreground">
                     {status}
                 </div>
             )}
 
             <form onSubmit={submit} className="flex flex-col gap-4">
-                <Input
+                <TextField
                     type="email"
                     name="email"
-                    label="Email"
-                    autoComplete="username"
-                    autoFocus
                     isRequired
                     value={data.email}
-                    onValueChange={(v) => setData('email', v)}
+                    onChange={(v) => setData('email', v)}
                     isInvalid={!!errors.email}
-                    errorMessage={errors.email}
-                />
+                >
+                    <Label>Email</Label>
+                    <Input autoComplete="username" autoFocus />
+                    <FieldError>{errors.email}</FieldError>
+                </TextField>
 
-                <Input
+                <TextField
                     type="password"
                     name="password"
-                    label="Password"
-                    autoComplete="current-password"
                     isRequired
                     value={data.password}
-                    onValueChange={(v) => setData('password', v)}
+                    onChange={(v) => setData('password', v)}
                     isInvalid={!!errors.password}
-                    errorMessage={errors.password}
-                />
+                >
+                    <Label>Password</Label>
+                    <Input autoComplete="current-password" />
+                    <FieldError>{errors.password}</FieldError>
+                </TextField>
 
                 <div className="flex items-center justify-between">
                     <Checkbox
-                        size="sm"
                         isSelected={data.remember}
-                        onValueChange={(v) => setData('remember', v)}
+                        onChange={(v) => setData('remember', v)}
                     >
-                        Ricordami
+                        <Checkbox.Content>
+                            <Checkbox.Control>
+                                <Checkbox.Indicator />
+                            </Checkbox.Control>
+                            Ricordami
+                        </Checkbox.Content>
                     </Checkbox>
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="text-sm text-primary hover:underline"
+                            className="text-sm text-accent hover:underline"
                         >
                             Password dimenticata?
                         </Link>
                     )}
                 </div>
 
-                <Button type="submit" color="primary" isLoading={processing}>
-                    Accedi
+                <Button type="submit" variant="primary" isPending={processing}>
+                    {({ isPending }) => (
+                        <>
+                            {isPending && <Spinner color="current" size="sm" />}
+                            Accedi
+                        </>
+                    )}
                 </Button>
 
-                <p className="text-center text-sm text-default-500">
+                <p className="text-center text-sm text-muted">
                     Non hai un account?{' '}
-                    <Link href={route('register')} className="text-primary hover:underline">
+                    <Link href={route('register')} className="text-accent hover:underline">
                         Registrati
                     </Link>
                 </p>

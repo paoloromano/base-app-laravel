@@ -4,7 +4,6 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-import { HeroUIProvider } from '@heroui/react';
 import { ThemeProvider } from './Providers/ThemeProvider';
 
 const appName = import.meta.env.VITE_APP_NAME || 'App Base';
@@ -19,12 +18,12 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
+        // HeroUI v3 non richiede un Provider: legge il tema dalle CSS variables
+        // applicate su <html> (classe .dark / data-theme) da ThemeProvider.
         root.render(
-            <HeroUIProvider>
-                <ThemeProvider>
-                    <App {...props} />
-                </ThemeProvider>
-            </HeroUIProvider>,
+            <ThemeProvider>
+                <App {...props} />
+            </ThemeProvider>,
         );
     },
     progress: {

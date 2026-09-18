@@ -1,7 +1,7 @@
 import UserLayout from '@/Layouts/UserLayout';
 import { PageProps } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Card, CardBody, CardHeader } from '@heroui/react';
+import { Card } from '@heroui/react';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
@@ -16,33 +16,39 @@ export default function Edit({
 
             <div className="mx-auto flex max-w-3xl flex-col gap-6">
                 <Card>
-                    <CardHeader>
-                        <h2 className="text-lg font-semibold">Informazioni profilo</h2>
-                    </CardHeader>
-                    <CardBody>
+                    <Card.Header>
+                        <Card.Title className="text-lg font-semibold">
+                            Informazioni profilo
+                        </Card.Title>
+                    </Card.Header>
+                    <Card.Content>
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
                         />
-                    </CardBody>
+                    </Card.Content>
                 </Card>
 
                 <Card>
-                    <CardHeader>
-                        <h2 className="text-lg font-semibold">Aggiorna password</h2>
-                    </CardHeader>
-                    <CardBody>
+                    <Card.Header>
+                        <Card.Title className="text-lg font-semibold">
+                            Aggiorna password
+                        </Card.Title>
+                    </Card.Header>
+                    <Card.Content>
                         <UpdatePasswordForm />
-                    </CardBody>
+                    </Card.Content>
                 </Card>
 
                 <Card>
-                    <CardHeader>
-                        <h2 className="text-lg font-semibold text-danger">Elimina account</h2>
-                    </CardHeader>
-                    <CardBody>
+                    <Card.Header>
+                        <Card.Title className="text-lg font-semibold text-danger">
+                            Elimina account
+                        </Card.Title>
+                    </Card.Header>
+                    <Card.Content>
                         <DeleteUserForm />
-                    </CardBody>
+                    </Card.Content>
                 </Card>
             </div>
         </UserLayout>
