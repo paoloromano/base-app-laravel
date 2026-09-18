@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
+use App\Http\Controllers\Admin\RoleController as AdminRoleController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +33,16 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('users', AdminUserController::class)->except(['show']);
+        Route::resource('roles', AdminRoleController::class)->except(['show']);
+
+        // I permessi non hanno schermate proprie: si creano ed eliminano
+        // dalla pagina Ruoli.
+        Route::post('permissions', [AdminPermissionController::class, 'store'])
+            ->name('permissions.store');
+        Route::delete('permissions/{permission}', [AdminPermissionController::class, 'destroy'])
+            ->name('permissions.destroy');
     });
 
 require __DIR__.'/auth.php';
